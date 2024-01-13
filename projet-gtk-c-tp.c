@@ -46,3 +46,34 @@ static void update_text_view(QueueWidgets *widgets) {
 //--------------------------------------------------------------------------------------------------------
 
 
+// Callback function for the "Enqueue" button.
+static void on_enqueue_clicked(GtkButton *button, gpointer user_data) {
+    QueueWidgets *widgets = (QueueWidgets *)user_data;
+
+    int *value = malloc(sizeof(int));
+    if (value) {
+        *value = rand() % 100; // Generate a new random number
+        g_queue_push_tail(widgets->queue, value);
+
+        update_text_view(widgets); // Refresh the display
+    }
+}
+// Callback function for the "Dequeue" button.
+static void on_dequeue_clicked(GtkButton *button, gpointer user_data) {
+    QueueWidgets *widgets = (QueueWidgets *)user_data;
+    int *value = g_queue_pop_head(widgets->queue);
+    if (value) {
+        char buffer[50];
+        sprintf(buffer, "%d\n", *value);
+        g_string_append(widgets->dequeued_items, buffer); // Append to dequeued items string
+        free(value); // Release the memory of the dequeued value
+
+        update_text_view(widgets); // Refresh the display
+    }
+}
+
+
+
+
+//--------------------------------------------------------------------------------------------------------------------
+
